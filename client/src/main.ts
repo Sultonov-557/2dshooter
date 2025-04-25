@@ -4,6 +4,9 @@ import io from "socket.io-client";
 import { Bullet } from "./entities/bullet";
 import { OneVOneZone } from "./zones/1v1";
 import { BigMapZone } from "./zones/bigmap";
+import { BigerMapZone } from "./zones/bigermap";
+import { EvenBigerMapZone } from "./zones/evenbigermap";
+import { EvenFuckingBigerMapZone } from "./zones/evenfuckingbigermap";
 
 const game = new Engine({
 	width: 480,
@@ -26,6 +29,7 @@ socket.on("connect", () => {
 	game.add(player);
 	players[socket.id] = player;
 	game.currentScene.camera.strategy.elasticToActor(player, 0.5, 0.5);
+	game.currentScene.camera.zoom = 0.2;
 });
 
 socket.on("shoot", (data) => {
@@ -58,6 +62,9 @@ socket.on("players", (list) => {
 
 game.add("1v1_zone", new OneVOneZone());
 game.add("bigmap_zone", new BigMapZone());
+game.add("bigermap_zone", new BigerMapZone());
+game.add("evenbigermap_zone", new EvenBigerMapZone());
+game.add("evenfuckingbigermap_zone", new EvenFuckingBigerMapZone());
 
-game.goToScene("bigmap_zone");
+game.goToScene("evenfuckingbigermap_zone");
 game.start();
