@@ -1,4 +1,15 @@
-import { Actor, vec, Color, Engine, Keys, PointerEvent, CollisionType } from "excalibur";
+import {
+	Actor,
+	vec,
+	Color,
+	Engine,
+	Keys,
+	PointerEvent,
+	CollisionType,
+	Collider,
+	CollisionContact,
+	Side,
+} from "excalibur";
 import { Bullet } from "./bullet";
 import { Socket } from "socket.io-client";
 
@@ -25,7 +36,15 @@ export class Player extends Actor {
 
 		if (currectPlayer) {
 			this.on("initialize", (evt) => {
-				setInterval(() => socket?.emit("move", { pos: { x: this.pos.x, y: this.pos.y }, rot: this.rotation }), 50);
+				setInterval(
+					() => socket?.emit("move", { pos: { x: this.pos.x, y: this.pos.y }, rot: this.rotation }),
+					50
+				);
+
+				socket?.on("move", (data) => {
+					this.pos.setTo(data.pos.x, data.pos.y);
+					this.rotation = data.rot;
+				});
 
 				const engine = evt.engine;
 
@@ -50,7 +69,17 @@ export class Player extends Actor {
 		const vel = direction.scale(this.bulletSpeed);
 
 		if (this.socket) {
-			this.socket.emit("shoot", { pos: { x: this.pos.x, y: this.pos.y }, dir: { x: vel.x, y: vel.y }, rot: this.rotation });
+			this.socket.emit("shoot", {
+				pos: { x: this.pos.x, y: this.pos.y },
+				dir: { x: vel.x, y: vel.y },
+				rot: this.rotation,
+			});
+		}
+	}
+
+	onCollisionStart(_self: Collider, other: Collider): void {
+		if (other.owner.hasTag("deadly")) {
+			this.pos.setTo(100, 100);
 		}
 	}
 

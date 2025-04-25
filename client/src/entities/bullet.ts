@@ -9,6 +9,7 @@ export class Bullet extends Actor {
 		super({ pos, vel, color: Color.Red, height: size, width: size });
 		this.createTime = Date.now();
 		this.body.collisionType = CollisionType.Active;
+		this.addTag("deadly");
 	}
 
 	onPostUpdate(engine: Engine, delta: number): void {

@@ -3,6 +3,7 @@ import { Player } from "./entities/player";
 import io from "socket.io-client";
 import { Bullet } from "./entities/bullet";
 import { OneVOneZone } from "./zones/1v1";
+import { BigMapZone } from "./zones/bigmap";
 
 const game = new Engine({
 	width: 480,
@@ -56,6 +57,7 @@ socket.on("players", (list) => {
 });
 
 game.add("1v1_zone", new OneVOneZone());
+game.add("bigmap_zone", new BigMapZone());
 
-game.goToScene("1v1_zone");
+game.goToScene("bigmap_zone");
 game.start();
